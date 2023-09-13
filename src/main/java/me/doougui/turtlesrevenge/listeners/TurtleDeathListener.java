@@ -20,6 +20,54 @@ import java.util.Objects;
 public class TurtleDeathListener implements Listener {
     Plugin plugin = TurtlesRevenge.getPlugin(TurtlesRevenge.class);
 
+    private void enchantEquipment(ItemStack equipment) {
+        equipment.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 5);
+        equipment.addUnsafeEnchantment(Enchantment.DURABILITY, 15);
+        equipment.addUnsafeEnchantment(Enchantment.THORNS, 10);
+    }
+
+    private Skeleton createBuffedSkeleton(World world, Location turtleLocation) {
+        Skeleton skeleton = world.spawn(turtleLocation, Skeleton.class);
+
+        if (skeleton.getEquipment() != null) {
+            skeleton.getEquipment().clear();
+        }
+
+        skeleton.setRemoveWhenFarAway(false);
+
+        ItemStack bow = new ItemStack(Material.BOW);
+
+        bow.addUnsafeEnchantment(Enchantment.ARROW_KNOCKBACK, 10);
+        bow.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 20);
+        bow.addUnsafeEnchantment(Enchantment.DURABILITY, 10);
+
+        skeleton.getEquipment().setItemInMainHand(bow);
+
+        ItemStack helmet = new ItemStack(Material.NETHERITE_HELMET);
+        this.enchantEquipment(helmet);
+
+        ItemStack chestplate = new ItemStack(Material.NETHERITE_CHESTPLATE);
+        this.enchantEquipment(chestplate);
+
+        ItemStack leggings = new ItemStack(Material.NETHERITE_LEGGINGS);
+        this.enchantEquipment(leggings);
+
+        ItemStack boots = new ItemStack(Material.NETHERITE_BOOTS);
+        this.enchantEquipment(boots);
+
+        if (skeleton.getEquipment() == null) return null;
+
+        skeleton.getEquipment().setHelmet(helmet);
+        skeleton.getEquipment().setChestplate(chestplate);
+        skeleton.getEquipment().setLeggings(leggings);
+        skeleton.getEquipment().setBoots(boots);
+
+        skeleton.setCustomName("Turtle Guardian");
+        skeleton.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 999999, 6));
+
+        return skeleton;
+    }
+
     @EventHandler
     public void onTurtleDeath(EntityDeathEvent e) {
         if (e.getEntityType() != EntityType.TURTLE) return;
@@ -43,63 +91,20 @@ public class TurtleDeathListener implements Listener {
         if (world == null) return;
 
         world.strikeLightningEffect(killer.getLocation());
-
-        Skeleton skeleton = world.spawn(turtleLocation, Skeleton.class);
-
         world.setStorm(true);
         world.setThundering(true);
 
-        if (skeleton.getEquipment() != null) {
-            skeleton.getEquipment().clear();
-        }
+        Skeleton skeleton = createBuffedSkeleton(world, turtleLocation);
 
-        skeleton.setRemoveWhenFarAway(false);
+        if (skeleton == null) return;
 
-        ItemStack bow = new ItemStack(Material.BOW);
-
-        bow.addUnsafeEnchantment(Enchantment.ARROW_KNOCKBACK, 10);
-        bow.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 20);
-        bow.addUnsafeEnchantment(Enchantment.DURABILITY, 10);
-
-        skeleton.getEquipment().setItemInMainHand(bow);
-
-        ItemStack helmet = new ItemStack(Material.NETHERITE_HELMET);
-        helmet.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 5);
-        helmet.addUnsafeEnchantment(Enchantment.DURABILITY, 15);
-        helmet.addUnsafeEnchantment(Enchantment.THORNS, 10);
-
-        ItemStack chestplate = new ItemStack(Material.NETHERITE_CHESTPLATE);
-        chestplate.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 5);
-        chestplate.addUnsafeEnchantment(Enchantment.DURABILITY, 15);
-        chestplate.addUnsafeEnchantment(Enchantment.THORNS, 10);
-
-        ItemStack leggings = new ItemStack(Material.NETHERITE_LEGGINGS);
-        leggings.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 5);
-        leggings.addUnsafeEnchantment(Enchantment.DURABILITY, 15);
-        leggings.addUnsafeEnchantment(Enchantment.THORNS, 10);
-
-        ItemStack boots = new ItemStack(Material.NETHERITE_BOOTS);
-        boots.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 5);
-        boots.addUnsafeEnchantment(Enchantment.DURABILITY, 15);
-        boots.addUnsafeEnchantment(Enchantment.THORNS, 10);
-
-        skeleton.getEquipment().setHelmet(helmet);
-        skeleton.getEquipment().setChestplate(chestplate);
-        skeleton.getEquipment().setLeggings(leggings);
-        skeleton.getEquipment().setBoots(boots);
-
-        skeleton.setCustomName("Turtle Guardian");
-        skeleton.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 999999, 6));
         killer.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 50, 4));
 
         ItemStack killerChestplate = Objects.requireNonNull(killer.getEquipment()).getChestplate();
 
-        if (killerChestplate == null) return;
-
-        if (killerChestplate.getType() != Material.ELYTRA) return;
+        if (killerChestplate == null || killerChestplate.getType() != Material.ELYTRA) return;
 
         world.dropItem(killer.getLocation(), killerChestplate);
         killer.getInventory().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
     }
-}
 }
