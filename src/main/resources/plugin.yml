@@ -1,0 +1,4 @@
+name: turtles-revenge
+version: '${project.version}'
+main: me.doougui.turtlesrevenge.TurtlesRevenge
+api-version: '1.20'
