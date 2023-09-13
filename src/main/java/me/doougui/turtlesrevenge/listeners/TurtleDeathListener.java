@@ -99,7 +99,6 @@ public class TurtleDeathListener implements Listener {
         if (killerChestplate.getType() != Material.ELYTRA) return;
 
         world.dropItem(killer.getLocation(), killerChestplate);
-//        killer.getInventory().addItem(killerChestplate);
         killer.getInventory().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
     }
 }
