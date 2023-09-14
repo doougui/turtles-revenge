@@ -1,6 +1,5 @@
 package me.doougui.turtlesrevenge.listeners;
 
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
