@@ -4,8 +4,6 @@ import me.doougui.turtlesrevenge.KillerSingleton;
 import me.doougui.turtlesrevenge.TurtlesRevenge;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -64,6 +62,7 @@ public class TurtleDeathListener implements Listener {
 
         skeleton.setCustomName("Turtle Guardian");
         skeleton.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 999999, 6));
+        skeleton.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 999999, 1));
 
         return skeleton;
     }
@@ -79,7 +78,7 @@ public class TurtleDeathListener implements Listener {
         String player = killer.getDisplayName();
 
         KillerSingleton singleton = KillerSingleton.getInstance();
-        singleton.setName(killer.getDisplayName());
+        singleton.setName(player);
 
         if (!player.equals(singleton.getName())) return;
 
