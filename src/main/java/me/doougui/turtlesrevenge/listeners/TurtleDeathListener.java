@@ -4,6 +4,8 @@ import me.doougui.turtlesrevenge.KillerSingleton;
 import me.doougui.turtlesrevenge.TurtlesRevenge;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
